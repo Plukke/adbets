@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: PoolFactory
@@ -17,13 +17,13 @@ dataSources:
         - PoolUpdated
       abis:
         - name: PoolFactory
-          file: ./abis/PoolFactory.json
+          file: PoolFactory/abis/PoolFactory.json
       eventHandlers:
         - event: PoolCreated(address,string)
           handler: handlePoolCreated
         - event: PoolUpdated(address,uint8)
           handler: handlePoolUpdated
-      file: ./src/mapping.ts
+      file: PoolFactory/PoolFactory.wasm
 templates:
   - kind: ethereum/contract
     name: Pool
@@ -38,10 +38,10 @@ templates:
         - Pool
       abis:
         - name: Pool
-          file: ./abis/Pool.json
+          file: Pool/abis/Pool.json
       eventHandlers:
         - event: BetPlaced(uint256,address,uint256)
           handler: handleBetPlaced
         - event: PoolResultAdded(uint256,address,uint8,uint256,uint256)
           handler: handleResultAdded
-      file: ./src/mapping.ts
+      file: PoolFactory/PoolFactory.wasm
