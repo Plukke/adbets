@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Plukke/adbets",
-    "create-local": "graph create --node http://localhost:8020/ Plukke/adbets",
-    "remove-local": "graph remove --node http://localhost:8020/ Plukke/adbets",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Plukke/adbets"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ plukke/adbets",
+    "create-local": "graph create --node http://localhost:8020/ plukke/adbets",
+    "remove-local": "graph remove --node http://localhost:8020/ plukke/adbets",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 plukke/adbets"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.22.1",
