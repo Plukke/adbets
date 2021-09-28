@@ -1,7 +1,14 @@
+type Factory @entity {
+  id: ID!
+  poolsCount: BigInt!
+  activePools: BigInt!
+}
+
 type Category @entity {
   id: ID!
   name: String!
   status: Int!
+  activePools: BigInt!
 }
 
 type Group @entity {
@@ -30,4 +37,6 @@ type Pool @entity {
   result: Int
   status: Int!
   creator: Bytes!
+  betsCount: Int!
+  volume: BigInt!
 }

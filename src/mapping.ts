@@ -1,49 +1,28 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { ipfs, json, Address } from "@graphprotocol/graph-ts";
+import { BigInt, ipfs, json } from "@graphprotocol/graph-ts";
+import { PoolFactory, PoolCreated } from "../generated/PoolFactory/PoolFactory";
 import {
-  PoolFactory,
-  PoolCreated,
+  Pool,
   PoolUpdated,
-} from "../generated/PoolFactory/PoolFactory";
-import { Pool } from "../generated/templates/Pool/Pool";
-import { Pool as EntityPool, Category, Group } from "../generated/schema";
-
-function handleCategory(
-  factoryContract: PoolFactory,
-  poolContract: Pool
-): void {
-  let categoryEntity = Category.load(poolContract.category().toString());
-
-  if (!categoryEntity) {
-    categoryEntity = new Category(poolContract.category().toString());
-
-    const categoryData = factoryContract.categories(poolContract.category());
-
-    categoryEntity.name = categoryData.value1;
-    categoryEntity.status = categoryData.value3;
-  }
-
-  categoryEntity.save();
-}
-
-function handleGroup(factoryContract: PoolFactory, poolContract: Pool): void {
-  let groupEntity = Group.load(poolContract.group().toString());
-
-  if (!groupEntity) {
-    groupEntity = new Group(poolContract.group().toString());
-
-    const categoryData = factoryContract.groups(poolContract.group());
-
-    groupEntity.category = categoryData.value1.toString();
-    groupEntity.name = categoryData.value2;
-    groupEntity.country = categoryData.value3;
-    groupEntity.status = categoryData.value5;
-  }
-
-  groupEntity.save();
-}
+  BetPlaced,
+  BetRemoved,
+} from "../generated/templates/Pool/Pool";
+import { Pool as EntityPool, Factory } from "../generated/schema";
+import handleCategory from "./utils/handleCategory";
+import handleGroup from "./utils/handleGroup";
 
 export function handlePoolCreated(event: PoolCreated): void {
+  // inicializar factory
+  let factory = Factory.load(event.params.factory.toHex());
+  if (factory === null) {
+    factory = new Factory(event.params.factory.toHex());
+    factory.poolsCount = BigInt.fromI32(0);
+    factory.activePools = BigInt.fromI32(0);
+  }
+
+  factory.poolsCount = factory.poolsCount.plus(BigInt.fromI32(1));
+  factory.activePools = factory.activePools.plus(BigInt.fromI32(1));
+  factory.save();
+
   let entity = EntityPool.load(event.params._address.toHex());
 
   if (!entity) {
@@ -53,12 +32,10 @@ export function handlePoolCreated(event: PoolCreated): void {
 
   entity.count = entity.count.plus(BigInt.fromI32(1));
 
-  let factoryContract = PoolFactory.bind(
-    Address.fromString("0xCce024598962C74aD36337569321570C95d7e3d1")
-  );
+  let factoryContract = PoolFactory.bind(event.params.factory);
   let poolContract = Pool.bind(event.params._address);
 
-  entity.name = poolContract.name();
+  entity.name = event.params.name;
   entity.startTimestamp = poolContract.startTimestamp();
   entity.endTimestamp = poolContract.endTimestamp();
   entity.acceptDraw = poolContract.acceptDraw();
@@ -67,16 +44,20 @@ export function handlePoolCreated(event: PoolCreated): void {
   entity.result = 0;
   entity.status = poolContract.status();
   entity.creator = poolContract.creator();
+  entity.betsCount = 0;
+  entity.volume = BigInt.fromI32(0);
 
+  // aumentar contador de la category a la que pertenece la pool
   // check if category & group exists or needs to be created
-  handleCategory(factoryContract, poolContract);
+  handleCategory(factoryContract, poolContract, "plus");
   handleGroup(factoryContract, poolContract);
 
   entity.category = poolContract.category().toString();
   entity.group = poolContract.group().toString();
 
   // retrieve pool metadata
-  const hash = entity.url.replace("https://api.thegraph.com/ipfs/", "");
+  // const hash = entity.url.replace("https://api.thegraph.com/ipfs/", "");
+  const hash = entity.url.split("/").pop();
   let data = ipfs.cat(hash);
   if (!!data) {
     let value = json.fromBytes(data);
@@ -105,4 +86,41 @@ export function handlePoolCreated(event: PoolCreated): void {
   entity.save();
 }
 
-export function handlePoolUpdated(event: PoolUpdated): void {}
+export function handlePoolUpdated(event: PoolUpdated): void {
+  let factory = Factory.load(event.params.factory.toHex());
+  if (factory) {
+    factory.activePools = factory.activePools.minus(BigInt.fromI32(1));
+    factory.save();
+  }
+
+  // checar de que categoria es la pool para restar de su contador
+  let factoryContract = PoolFactory.bind(event.params.factory);
+  let poolContract = Pool.bind(event.params._address);
+  if (factoryContract && poolContract) {
+    handleCategory(factoryContract, poolContract, "minus");
+  }
+}
+
+export function handleBetPlaced(event: BetPlaced): void {
+  // aumentar betsCount de la pool
+  // aumentar volume de la pool
+  let entity = EntityPool.load(event.params.pool.toHex());
+  if (entity) {
+    entity.betsCount = entity.betsCount + 1;
+    entity.volume = entity.volume.plus(event.params.amount);
+
+    entity.save();
+  }
+}
+
+export function handleBetRemoved(event: BetRemoved): void {
+  // restar betsCount de la pool
+  // reducir volume de la pool
+  let entity = EntityPool.load(event.params.pool.toHex());
+  if (entity) {
+    entity.betsCount = entity.betsCount + 1;
+    entity.volume = entity.volume.minus(event.params.amount);
+
+    entity.save();
+  }
+}

@@ -12,6 +12,60 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class Factory extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("poolsCount", Value.fromBigInt(BigInt.zero()));
+    this.set("activePools", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Factory entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Factory entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Factory", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Factory | null {
+    return changetype<Factory | null>(store.get("Factory", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get poolsCount(): BigInt {
+    let value = this.get("poolsCount");
+    return value!.toBigInt();
+  }
+
+  set poolsCount(value: BigInt) {
+    this.set("poolsCount", Value.fromBigInt(value));
+  }
+
+  get activePools(): BigInt {
+    let value = this.get("activePools");
+    return value!.toBigInt();
+  }
+
+  set activePools(value: BigInt) {
+    this.set("activePools", Value.fromBigInt(value));
+  }
+}
+
 export class Category extends Entity {
   constructor(id: string) {
     super();
@@ -19,6 +73,7 @@ export class Category extends Entity {
 
     this.set("name", Value.fromString(""));
     this.set("status", Value.fromI32(0));
+    this.set("activePools", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -63,6 +118,15 @@ export class Category extends Entity {
 
   set status(value: i32) {
     this.set("status", Value.fromI32(value));
+  }
+
+  get activePools(): BigInt {
+    let value = this.get("activePools");
+    return value!.toBigInt();
+  }
+
+  set activePools(value: BigInt) {
+    this.set("activePools", Value.fromBigInt(value));
   }
 }
 
@@ -160,6 +224,8 @@ export class Pool extends Entity {
     this.set("result", Value.fromI32(0));
     this.set("status", Value.fromI32(0));
     this.set("creator", Value.fromBytes(Bytes.empty()));
+    this.set("betsCount", Value.fromI32(0));
+    this.set("volume", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -338,5 +404,23 @@ export class Pool extends Entity {
 
   set creator(value: Bytes) {
     this.set("creator", Value.fromBytes(value));
+  }
+
+  get betsCount(): i32 {
+    let value = this.get("betsCount");
+    return value!.toI32();
+  }
+
+  set betsCount(value: i32) {
+    this.set("betsCount", Value.fromI32(value));
+  }
+
+  get volume(): BigInt {
+    let value = this.get("volume");
+    return value!.toBigInt();
+  }
+
+  set volume(value: BigInt) {
+    this.set("volume", Value.fromBigInt(value));
   }
 }

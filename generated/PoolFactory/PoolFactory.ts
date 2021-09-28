@@ -30,51 +30,30 @@ export class PoolCreated__Params {
   get name(): string {
     return this._event.parameters[1].value.toString();
   }
-}
 
-export class PoolUpdated extends ethereum.Event {
-  get params(): PoolUpdated__Params {
-    return new PoolUpdated__Params(this);
-  }
-}
-
-export class PoolUpdated__Params {
-  _event: PoolUpdated;
-
-  constructor(event: PoolUpdated) {
-    this._event = event;
-  }
-
-  get _address(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get status(): i32 {
-    return this._event.parameters[1].value.toI32();
+  get factory(): Address {
+    return this._event.parameters[2].value.toAddress();
   }
 }
 
 export class PoolFactory__categoriesResult {
   value0: BigInt;
   value1: string;
-  value2: BigInt;
-  value3: i32;
+  value2: i32;
 
-  constructor(value0: BigInt, value1: string, value2: BigInt, value3: i32) {
+  constructor(value0: BigInt, value1: string, value2: i32) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
-    this.value3 = value3;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
     map.set("value1", ethereum.Value.fromString(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set(
-      "value3",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value3))
+      "value2",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value2))
     );
     return map;
   }
@@ -85,23 +64,20 @@ export class PoolFactory__groupsResult {
   value1: BigInt;
   value2: string;
   value3: string;
-  value4: BigInt;
-  value5: i32;
+  value4: i32;
 
   constructor(
     value0: BigInt,
     value1: BigInt,
     value2: string,
     value3: string,
-    value4: BigInt,
-    value5: i32
+    value4: i32
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
     this.value4 = value4;
-    this.value5 = value5;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -110,56 +86,11 @@ export class PoolFactory__groupsResult {
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     map.set("value2", ethereum.Value.fromString(this.value2));
     map.set("value3", ethereum.Value.fromString(this.value3));
-    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     map.set(
-      "value5",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5))
+      "value4",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
     );
     return map;
-  }
-}
-
-export class PoolFactory__listCategoriesResultValue0Struct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get name(): string {
-    return this[1].toString();
-  }
-
-  get poolsCount(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get status(): i32 {
-    return this[3].toI32();
-  }
-}
-
-export class PoolFactory__listGroupsResultValue0Struct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get category(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get name(): string {
-    return this[2].toString();
-  }
-
-  get country(): string {
-    return this[3].toString();
-  }
-
-  get poolsCount(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get status(): i32 {
-    return this[5].toI32();
   }
 }
 
@@ -213,39 +144,17 @@ export class PoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  activePools(param0: BigInt): Address {
-    let result = super.call("activePools", "activePools(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_activePools(param0: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "activePools",
-      "activePools(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   categories(param0: BigInt): PoolFactory__categoriesResult {
     let result = super.call(
       "categories",
-      "categories(uint256):(uint256,string,uint256,uint8)",
+      "categories(uint256):(uint256,string,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new PoolFactory__categoriesResult(
       result[0].toBigInt(),
       result[1].toString(),
-      result[2].toBigInt(),
-      result[3].toI32()
+      result[2].toI32()
     );
   }
 
@@ -254,7 +163,7 @@ export class PoolFactory extends ethereum.SmartContract {
   ): ethereum.CallResult<PoolFactory__categoriesResult> {
     let result = super.tryCall(
       "categories",
-      "categories(uint256):(uint256,string,uint256,uint8)",
+      "categories(uint256):(uint256,string,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -265,56 +174,9 @@ export class PoolFactory extends ethereum.SmartContract {
       new PoolFactory__categoriesResult(
         value[0].toBigInt(),
         value[1].toString(),
-        value[2].toBigInt(),
-        value[3].toI32()
+        value[2].toI32()
       )
     );
-  }
-
-  deployedPools(param0: BigInt): Address {
-    let result = super.call(
-      "deployedPools",
-      "deployedPools(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_deployedPools(param0: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "deployedPools",
-      "deployedPools(uint256):(address)",
-      [ethereum.Value.fromUnsignedBigInt(param0)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  getActivePools(): Array<Address> {
-    let result = super.call(
-      "getActivePools",
-      "getActivePools():(address[])",
-      []
-    );
-
-    return result[0].toAddressArray();
-  }
-
-  try_getActivePools(): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall(
-      "getActivePools",
-      "getActivePools():(address[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
   getBalance(): BigInt {
@@ -332,33 +194,10 @@ export class PoolFactory extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getDeployedPools(): Array<Address> {
-    let result = super.call(
-      "getDeployedPools",
-      "getDeployedPools():(address[])",
-      []
-    );
-
-    return result[0].toAddressArray();
-  }
-
-  try_getDeployedPools(): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall(
-      "getDeployedPools",
-      "getDeployedPools():(address[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
-  }
-
   groups(param0: BigInt): PoolFactory__groupsResult {
     let result = super.call(
       "groups",
-      "groups(uint256):(uint256,uint256,string,string,uint256,uint8)",
+      "groups(uint256):(uint256,uint256,string,string,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -367,15 +206,14 @@ export class PoolFactory extends ethereum.SmartContract {
       result[1].toBigInt(),
       result[2].toString(),
       result[3].toString(),
-      result[4].toBigInt(),
-      result[5].toI32()
+      result[4].toI32()
     );
   }
 
   try_groups(param0: BigInt): ethereum.CallResult<PoolFactory__groupsResult> {
     let result = super.tryCall(
       "groups",
-      "groups(uint256):(uint256,uint256,string,string,uint256,uint8)",
+      "groups(uint256):(uint256,uint256,string,string,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -388,65 +226,8 @@ export class PoolFactory extends ethereum.SmartContract {
         value[1].toBigInt(),
         value[2].toString(),
         value[3].toString(),
-        value[4].toBigInt(),
-        value[5].toI32()
+        value[4].toI32()
       )
-    );
-  }
-
-  listCategories(): Array<PoolFactory__listCategoriesResultValue0Struct> {
-    let result = super.call(
-      "listCategories",
-      "listCategories():((uint256,string,uint256,uint8)[])",
-      []
-    );
-
-    return result[0].toTupleArray<
-      PoolFactory__listCategoriesResultValue0Struct
-    >();
-  }
-
-  try_listCategories(): ethereum.CallResult<
-    Array<PoolFactory__listCategoriesResultValue0Struct>
-  > {
-    let result = super.tryCall(
-      "listCategories",
-      "listCategories():((uint256,string,uint256,uint8)[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<PoolFactory__listCategoriesResultValue0Struct>()
-    );
-  }
-
-  listGroups(): Array<PoolFactory__listGroupsResultValue0Struct> {
-    let result = super.call(
-      "listGroups",
-      "listGroups():((uint256,uint256,string,string,uint256,uint8)[])",
-      []
-    );
-
-    return result[0].toTupleArray<PoolFactory__listGroupsResultValue0Struct>();
-  }
-
-  try_listGroups(): ethereum.CallResult<
-    Array<PoolFactory__listGroupsResultValue0Struct>
-  > {
-    let result = super.tryCall(
-      "listGroups",
-      "listGroups():((uint256,uint256,string,string,uint256,uint8)[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<PoolFactory__listGroupsResultValue0Struct>()
     );
   }
 }
@@ -649,48 +430,6 @@ export class SetPoolResultCall__Outputs {
   _call: SetPoolResultCall;
 
   constructor(call: SetPoolResultCall) {
-    this._call = call;
-  }
-}
-
-export class UpdatePoolsCall extends ethereum.Call {
-  get inputs(): UpdatePoolsCall__Inputs {
-    return new UpdatePoolsCall__Inputs(this);
-  }
-
-  get outputs(): UpdatePoolsCall__Outputs {
-    return new UpdatePoolsCall__Outputs(this);
-  }
-}
-
-export class UpdatePoolsCall__Inputs {
-  _call: UpdatePoolsCall;
-
-  constructor(call: UpdatePoolsCall) {
-    this._call = call;
-  }
-
-  get _address(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _status(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-
-  get _categoryId(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get _groupId(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-}
-
-export class UpdatePoolsCall__Outputs {
-  _call: UpdatePoolsCall;
-
-  constructor(call: UpdatePoolsCall) {
     this._call = call;
   }
 }

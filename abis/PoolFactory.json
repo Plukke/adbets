@@ -1,5 +1,9 @@
 [
-  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
   {
     "anonymous": false,
     "inputs": [
@@ -14,36 +18,30 @@
         "internalType": "string",
         "name": "name",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "factory",
+        "type": "address"
       }
     ],
     "name": "PoolCreated",
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_address",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "enum Pool.STATUS",
-        "name": "status",
-        "type": "uint8"
-      }
-    ],
-    "name": "PoolUpdated",
-    "type": "event"
+    "stateMutability": "payable",
+    "type": "fallback"
   },
-  { "stateMutability": "payable", "type": "fallback" },
   {
     "inputs": [],
     "name": "_categoryIds",
     "outputs": [
-      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -52,7 +50,11 @@
     "inputs": [],
     "name": "_groupIds",
     "outputs": [
-      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -61,21 +63,22 @@
     "inputs": [],
     "name": "_poolIds",
     "outputs": [
-      { "internalType": "uint256", "name": "_value", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "activePools",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      { "internalType": "address", "name": "_address", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
     ],
     "name": "cancelPool",
     "outputs": [],
@@ -83,12 +86,25 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "categories",
     "outputs": [
-      { "internalType": "uint256", "name": "id", "type": "uint256" },
-      { "internalType": "string", "name": "name", "type": "string" },
-      { "internalType": "uint256", "name": "poolsCount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
       {
         "internalType": "enum PoolFactory.CATEGORY_STATUS",
         "name": "status",
@@ -102,11 +118,31 @@
     "inputs": [
       {
         "components": [
-          { "internalType": "string", "name": "name", "type": "string" },
-          { "internalType": "string", "name": "url", "type": "string" },
-          { "internalType": "uint256", "name": "category", "type": "uint256" },
-          { "internalType": "uint256", "name": "group", "type": "uint256" },
-          { "internalType": "bool", "name": "acceptDraw", "type": "bool" },
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "url",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "category",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "group",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "acceptDraw",
+            "type": "bool"
+          },
           {
             "internalType": "enum Pool.RISK_LEVEL",
             "name": "riskLevel",
@@ -127,9 +163,21 @@
         "name": "input",
         "type": "tuple"
       },
-      { "internalType": "string", "name": "newCategoryName", "type": "string" },
-      { "internalType": "string", "name": "newGroupName", "type": "string" },
-      { "internalType": "string", "name": "newGroupCountry", "type": "string" }
+      {
+        "internalType": "string",
+        "name": "newCategoryName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "newGroupName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "newGroupCountry",
+        "type": "string"
+      }
     ],
     "name": "createPool",
     "outputs": [],
@@ -137,46 +185,48 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "deployedPools",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getActivePools",
-    "outputs": [
-      { "internalType": "address[]", "name": "", "type": "address[]" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "getBalance",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getDeployedPools",
     "outputs": [
-      { "internalType": "address[]", "name": "", "type": "address[]" }
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "groups",
     "outputs": [
-      { "internalType": "uint256", "name": "id", "type": "uint256" },
-      { "internalType": "uint256", "name": "category", "type": "uint256" },
-      { "internalType": "string", "name": "name", "type": "string" },
-      { "internalType": "string", "name": "country", "type": "string" },
-      { "internalType": "uint256", "name": "poolsCount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "category",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "country",
+        "type": "string"
+      },
       {
         "internalType": "enum PoolFactory.CATEGORY_STATUS",
         "name": "status",
@@ -187,89 +237,29 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "listCategories",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "id", "type": "uint256" },
-          { "internalType": "string", "name": "name", "type": "string" },
-          {
-            "internalType": "uint256",
-            "name": "poolsCount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum PoolFactory.CATEGORY_STATUS",
-            "name": "status",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct PoolFactory.Category[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "listGroups",
-    "outputs": [
-      {
-        "components": [
-          { "internalType": "uint256", "name": "id", "type": "uint256" },
-          { "internalType": "uint256", "name": "category", "type": "uint256" },
-          { "internalType": "string", "name": "name", "type": "string" },
-          { "internalType": "string", "name": "country", "type": "string" },
-          {
-            "internalType": "uint256",
-            "name": "poolsCount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "enum PoolFactory.CATEGORY_STATUS",
-            "name": "status",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct PoolFactory.Group[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
-      { "internalType": "address", "name": "_address", "type": "address" },
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
       {
         "internalType": "enum Pool.SELECTION",
         "name": "_result",
         "type": "uint8"
       },
-      { "internalType": "uint256", "name": "_homeScore", "type": "uint256" },
-      { "internalType": "uint256", "name": "_awayScore", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_homeScore",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_awayScore",
+        "type": "uint256"
+      }
     ],
     "name": "setPoolResult",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "_address", "type": "address" },
-      {
-        "internalType": "enum Pool.STATUS",
-        "name": "_status",
-        "type": "uint8"
-      },
-      { "internalType": "uint256", "name": "_categoryId", "type": "uint256" },
-      { "internalType": "uint256", "name": "_groupId", "type": "uint256" }
-    ],
-    "name": "updatePools",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -281,5 +271,8 @@
     "stateMutability": "nonpayable",
     "type": "function"
   },
-  { "stateMutability": "payable", "type": "receive" }
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
 ]

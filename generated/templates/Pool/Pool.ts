@@ -34,6 +34,40 @@ export class BetPlaced__Params {
   get amount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get pool(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+}
+
+export class BetRemoved extends ethereum.Event {
+  get params(): BetRemoved__Params {
+    return new BetRemoved__Params(this);
+  }
+}
+
+export class BetRemoved__Params {
+  _event: BetRemoved;
+
+  constructor(event: BetRemoved) {
+    this._event = event;
+  }
+
+  get id(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get user(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get pool(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
 }
 
 export class PoolResultAdded extends ethereum.Event {
@@ -67,6 +101,32 @@ export class PoolResultAdded__Params {
 
   get awayScore(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+}
+
+export class PoolUpdated extends ethereum.Event {
+  get params(): PoolUpdated__Params {
+    return new PoolUpdated__Params(this);
+  }
+}
+
+export class PoolUpdated__Params {
+  _event: PoolUpdated;
+
+  constructor(event: PoolUpdated) {
+    this._event = event;
+  }
+
+  get _address(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get status(): i32 {
+    return this._event.parameters[1].value.toI32();
+  }
+
+  get factory(): Address {
+    return this._event.parameters[2].value.toAddress();
   }
 }
 
@@ -418,6 +478,25 @@ export class Pool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  factoryAddress(): Address {
+    let result = super.call("factoryAddress", "factoryAddress():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_factoryAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "factoryAddress",
+      "factoryAddress():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getBalance(): BigInt {

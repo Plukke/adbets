@@ -6,8 +6,9 @@ dataSources:
     name: PoolFactory
     network: mumbai
     source:
-      address: "0xCce024598962C74aD36337569321570C95d7e3d1"
+      address: "0xa21beDe4eFeA49803f2C537FA896521edF5a256e"
       abi: PoolFactory
+      startBlock: 19000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -18,11 +19,11 @@ dataSources:
       abis:
         - name: PoolFactory
           file: PoolFactory/abis/PoolFactory.json
+        - name: Pool
+          file: PoolFactory/abis/Pool.json
       eventHandlers:
-        - event: PoolCreated(address,string)
+        - event: PoolCreated(address,string,address)
           handler: handlePoolCreated
-        - event: PoolUpdated(address,uint8)
-          handler: handlePoolUpdated
       file: PoolFactory/PoolFactory.wasm
 templates:
   - kind: ethereum/contract
@@ -37,11 +38,17 @@ templates:
       entities:
         - Pool
       abis:
+        - name: PoolFactory
+          file: Pool/abis/PoolFactory.json
         - name: Pool
           file: Pool/abis/Pool.json
       eventHandlers:
-        - event: BetPlaced(uint256,address,uint256)
+        - event: PoolUpdated(address,uint8,address)
+          handler: handlePoolUpdated
+        - event: BetPlaced(uint256,address,uint256,address)
           handler: handleBetPlaced
+        - event: BetRemoved(uint256,address,uint256,address)
+          handler: handleBetRemoved
         - event: PoolResultAdded(uint256,address,uint8,uint256,uint256)
           handler: handleResultAdded
       file: PoolFactory/PoolFactory.wasm
