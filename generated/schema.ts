@@ -242,6 +242,9 @@ export class Pool extends Entity {
     this.set("status", Value.fromI32(0));
     this.set("creator", Value.fromBytes(Bytes.empty()));
     this.set("betsCount", Value.fromI32(0));
+    this.set("homeCounter", Value.fromI32(0));
+    this.set("awayCounter", Value.fromI32(0));
+    this.set("drawCounter", Value.fromI32(0));
     this.set("volume", Value.fromBigInt(BigInt.zero()));
   }
 
@@ -430,6 +433,33 @@ export class Pool extends Entity {
 
   set betsCount(value: i32) {
     this.set("betsCount", Value.fromI32(value));
+  }
+
+  get homeCounter(): i32 {
+    let value = this.get("homeCounter");
+    return value!.toI32();
+  }
+
+  set homeCounter(value: i32) {
+    this.set("homeCounter", Value.fromI32(value));
+  }
+
+  get awayCounter(): i32 {
+    let value = this.get("awayCounter");
+    return value!.toI32();
+  }
+
+  set awayCounter(value: i32) {
+    this.set("awayCounter", Value.fromI32(value));
+  }
+
+  get drawCounter(): i32 {
+    let value = this.get("drawCounter");
+    return value!.toI32();
+  }
+
+  set drawCounter(value: i32) {
+    this.set("drawCounter", Value.fromI32(value));
   }
 
   get volume(): BigInt {

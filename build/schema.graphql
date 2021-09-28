@@ -39,5 +39,8 @@ type Pool @entity {
   status: Int!
   creator: Bytes!
   betsCount: Int!
+  homeCounter: Int!
+  awayCounter: Int!
+  drawCounter: Int!
   volume: BigInt!
 }

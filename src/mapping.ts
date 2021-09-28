@@ -45,6 +45,9 @@ export function handlePoolCreated(event: PoolCreated): void {
   entity.status = poolContract.status();
   entity.creator = poolContract.creator();
   entity.betsCount = 0;
+  entity.homeCounter = 0;
+  entity.awayCounter = 0;
+  entity.drawCounter = 0;
   entity.volume = BigInt.fromI32(0);
 
   // aumentar contador de la category a la que pertenece la pool
@@ -107,7 +110,15 @@ export function handleBetPlaced(event: BetPlaced): void {
   let entity = EntityPool.load(event.params.pool.toHex());
   if (entity) {
     entity.betsCount = entity.betsCount + 1;
+
     entity.volume = entity.volume.plus(event.params.amount);
+
+    let poolContract = Pool.bind(event.params.pool);
+    if (poolContract) {
+      entity.homeCounter = poolContract._homeCounter().toI32();
+      entity.awayCounter = poolContract._awayCounter().toI32();
+      entity.drawCounter = poolContract._drawCounter().toI32();
+    }
 
     entity.save();
   }
@@ -120,6 +131,13 @@ export function handleBetRemoved(event: BetRemoved): void {
   if (entity) {
     entity.betsCount = entity.betsCount + 1;
     entity.volume = entity.volume.minus(event.params.amount);
+
+    let poolContract = Pool.bind(event.params.pool);
+    if (poolContract) {
+      entity.homeCounter = poolContract._homeCounter().toI32();
+      entity.awayCounter = poolContract._awayCounter().toI32();
+      entity.drawCounter = poolContract._drawCounter().toI32();
+    }
 
     entity.save();
   }

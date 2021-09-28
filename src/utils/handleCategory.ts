@@ -21,10 +21,14 @@ function handleCategory(
   }
 
   if (operator === "plus") {
-    categoryEntity.activePools.plus(BigInt.fromI32(1));
+    categoryEntity.activePools = categoryEntity.activePools.plus(
+      BigInt.fromI32(1)
+    );
   }
   if (operator === "minus") {
-    categoryEntity.activePools.minus(BigInt.fromI32(1));
+    categoryEntity.activePools = categoryEntity.activePools.minus(
+      BigInt.fromI32(1)
+    );
   }
 
   categoryEntity.save();
