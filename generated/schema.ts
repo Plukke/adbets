@@ -128,6 +128,23 @@ export class Category extends Entity {
   set activePools(value: BigInt) {
     this.set("activePools", Value.fromBigInt(value));
   }
+
+  get groups(): Array<string> | null {
+    let value = this.get("groups");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set groups(value: Array<string> | null) {
+    if (!value) {
+      this.unset("groups");
+    } else {
+      this.set("groups", Value.fromStringArray(<Array<string>>value));
+    }
+  }
 }
 
 export class Group extends Entity {

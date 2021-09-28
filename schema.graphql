@@ -9,6 +9,7 @@ type Category @entity {
   name: String!
   status: Int!
   activePools: BigInt!
+  groups: [Group!] @derivedFrom(field: "category")
 }
 
 type Group @entity {
