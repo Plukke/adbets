@@ -500,4 +500,115 @@ export class Pool extends Entity {
   set volume(value: BigInt) {
     this.set("volume", Value.fromBigInt(value));
   }
+
+  get bets(): Array<string> | null {
+    let value = this.get("bets");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set bets(value: Array<string> | null) {
+    if (!value) {
+      this.unset("bets");
+    } else {
+      this.set("bets", Value.fromStringArray(<Array<string>>value));
+    }
+  }
+}
+
+export class Bet extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("pool", Value.fromString(""));
+    this.set("owner", Value.fromBytes(Bytes.empty()));
+    this.set("selection", Value.fromI32(0));
+    this.set("amount", Value.fromBigInt(BigInt.zero()));
+    this.set("status", Value.fromI32(0));
+    this.set("timestamp", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Bet entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Bet entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Bet", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Bet | null {
+    return changetype<Bet | null>(store.get("Bet", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value!.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value!.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get selection(): i32 {
+    let value = this.get("selection");
+    return value!.toI32();
+  }
+
+  set selection(value: i32) {
+    this.set("selection", Value.fromI32(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value!.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get status(): i32 {
+    let value = this.get("status");
+    return value!.toI32();
+  }
+
+  set status(value: i32) {
+    this.set("status", Value.fromI32(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
 }

@@ -46,4 +46,15 @@ type Pool @entity {
   awayBetsAmount: BigInt!
   drawBetsAmount: BigInt!
   volume: BigInt!
+  bets: [Bet!] @derivedFrom(field: "pool")
+}
+
+type Bet @entity {
+  id: ID!
+  pool: Pool!
+  owner: Bytes!
+  selection: Int!
+  amount: BigInt!
+  status: Int!
+  timestamp: BigInt!
 }

@@ -7,7 +7,7 @@ import {
   BetRemoved,
 } from "../generated/templates/Pool/Pool";
 import { Pool as PoolTemplate } from "../generated/templates";
-import { Pool as EntityPool, Factory } from "../generated/schema";
+import { Pool as EntityPool, Factory, Bet } from "../generated/schema";
 import handleCategory from "./utils/handleCategory";
 import handleGroup from "./utils/handleGroup";
 
@@ -136,6 +136,20 @@ export function handleBetPlaced(event: BetPlaced): void {
     }
   }
 
+  let bet = Bet.load(event.params.id.toHex());
+
+  if (!bet) {
+    bet = new Bet(event.params.id.toHex());
+  }
+
+  bet.pool = event.params.pool.toString();
+  bet.owner = event.params.user;
+  bet.selection = event.params.selection;
+  bet.amount = event.params.amount;
+  bet.status = 0;
+  bet.timestamp = event.block.timestamp;
+
+  bet.save();
   entity.save();
 }
 
@@ -164,5 +178,14 @@ export function handleBetRemoved(event: BetRemoved): void {
     }
   }
 
+  let bet = Bet.load(event.params.id.toHex());
+
+  if (!bet) {
+    bet = new Bet(event.params.id.toHex());
+  }
+
+  bet.status = 2;
+
+  bet.save();
   entity.save();
 }
