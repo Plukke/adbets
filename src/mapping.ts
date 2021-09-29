@@ -136,10 +136,9 @@ export function handleBetPlaced(event: BetPlaced): void {
     }
   }
 
-  let bet = Bet.load(event.params.id.toHex());
-
+  let bet = Bet.load(event.params.id.toString());
   if (!bet) {
-    bet = new Bet(event.params.id.toHex());
+    bet = new Bet(event.params.id.toString());
   }
 
   bet.pool = event.params.pool.toString();
@@ -178,10 +177,9 @@ export function handleBetRemoved(event: BetRemoved): void {
     }
   }
 
-  let bet = Bet.load(event.params.id.toHex());
-
+  let bet = Bet.load(event.params.id.toString());
   if (!bet) {
-    bet = new Bet(event.params.id.toHex());
+    bet = new Bet(event.params.id.toString());
   }
 
   bet.status = 2;
