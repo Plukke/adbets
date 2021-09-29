@@ -524,7 +524,7 @@ export class Bet extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("pool", Value.fromString(""));
+    this.set("poolID", Value.fromBytes(Bytes.empty()));
     this.set("owner", Value.fromBytes(Bytes.empty()));
     this.set("selection", Value.fromI32(0));
     this.set("amount", Value.fromBigInt(BigInt.zero()));
@@ -558,13 +558,30 @@ export class Bet extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get pool(): string {
+  get pool(): string | null {
     let value = this.get("pool");
-    return value!.toString();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set pool(value: string) {
-    this.set("pool", Value.fromString(value));
+  set pool(value: string | null) {
+    if (!value) {
+      this.unset("pool");
+    } else {
+      this.set("pool", Value.fromString(<string>value));
+    }
+  }
+
+  get poolID(): Bytes {
+    let value = this.get("poolID");
+    return value!.toBytes();
+  }
+
+  set poolID(value: Bytes) {
+    this.set("poolID", Value.fromBytes(value));
   }
 
   get owner(): Bytes {

@@ -141,7 +141,8 @@ export function handleBetPlaced(event: BetPlaced): void {
     bet = new Bet(event.params.id.toString());
   }
 
-  bet.pool = event.params.pool.toString();
+  bet.pool = entity.id;
+  bet.poolID = event.params.pool;
   bet.owner = event.params.user;
   bet.selection = event.params.selection;
   bet.amount = event.params.amount;

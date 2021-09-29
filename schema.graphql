@@ -51,7 +51,8 @@ type Pool @entity {
 
 type Bet @entity {
   id: ID!
-  pool: Pool!
+  pool: Pool
+  poolID: Bytes!
   owner: Bytes!
   selection: Int!
   amount: BigInt!
