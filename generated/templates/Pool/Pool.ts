@@ -38,6 +38,10 @@ export class BetPlaced__Params {
   get pool(): Address {
     return this._event.parameters[3].value.toAddress();
   }
+
+  get selection(): i32 {
+    return this._event.parameters[4].value.toI32();
+  }
 }
 
 export class BetRemoved extends ethereum.Event {
@@ -67,6 +71,10 @@ export class BetRemoved__Params {
 
   get pool(): Address {
     return this._event.parameters[3].value.toAddress();
+  }
+
+  get selection(): i32 {
+    return this._event.parameters[4].value.toI32();
   }
 }
 

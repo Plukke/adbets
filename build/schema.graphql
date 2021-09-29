@@ -42,5 +42,8 @@ type Pool @entity {
   homeCounter: Int!
   awayCounter: Int!
   drawCounter: Int!
+  homeBetsAmount: BigInt!
+  awayBetsAmount: BigInt!
+  drawBetsAmount: BigInt!
   volume: BigInt!
 }

@@ -6,7 +6,7 @@ dataSources:
     name: PoolFactory
     network: mumbai
     source:
-      address: "0xa21beDe4eFeA49803f2C537FA896521edF5a256e"
+      address: "0x71226A9A3bc08808238195ea316cE1a73bb4324D"
       abi: PoolFactory
       startBlock: 19000000
     mapping:
@@ -45,9 +45,9 @@ templates:
       eventHandlers:
         - event: PoolUpdated(address,uint8,address)
           handler: handlePoolUpdated
-        - event: BetPlaced(uint256,address,uint256,address)
+        - event: BetPlaced(uint256,address,uint256,address,uint8)
           handler: handleBetPlaced
-        - event: BetRemoved(uint256,address,uint256,address)
+        - event: BetRemoved(uint256,address,uint256,address,uint8)
           handler: handleBetRemoved
         - event: PoolResultAdded(uint256,address,uint8,uint256,uint256)
           handler: handleResultAdded

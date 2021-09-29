@@ -81,6 +81,12 @@
         "internalType": "address",
         "name": "pool",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum Pool.SELECTION",
+        "name": "selection",
+        "type": "uint8"
       }
     ],
     "name": "BetPlaced",
@@ -112,6 +118,12 @@
         "internalType": "address",
         "name": "pool",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum Pool.SELECTION",
+        "name": "selection",
+        "type": "uint8"
       }
     ],
     "name": "BetRemoved",

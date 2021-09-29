@@ -6,6 +6,7 @@ import {
   BetPlaced,
   BetRemoved,
 } from "../generated/templates/Pool/Pool";
+import { Pool as PoolTemplate } from "../generated/templates";
 import { Pool as EntityPool, Factory } from "../generated/schema";
 import handleCategory from "./utils/handleCategory";
 import handleGroup from "./utils/handleGroup";
@@ -48,6 +49,9 @@ export function handlePoolCreated(event: PoolCreated): void {
   entity.homeCounter = 0;
   entity.awayCounter = 0;
   entity.drawCounter = 0;
+  entity.homeBetsAmount = BigInt.fromI32(0);
+  entity.awayBetsAmount = BigInt.fromI32(0);
+  entity.drawBetsAmount = BigInt.fromI32(0);
   entity.volume = BigInt.fromI32(0);
 
   // aumentar contador de la category a la que pertenece la pool
@@ -86,6 +90,8 @@ export function handlePoolCreated(event: PoolCreated): void {
     }
   }
 
+  PoolTemplate.create(event.params._address);
+
   entity.save();
 }
 
@@ -108,37 +114,55 @@ export function handleBetPlaced(event: BetPlaced): void {
   // aumentar betsCount de la pool
   // aumentar volume de la pool
   let entity = EntityPool.load(event.params.pool.toHex());
-  if (entity) {
-    entity.betsCount = entity.betsCount + 1;
-
-    entity.volume = entity.volume.plus(event.params.amount);
-
-    let poolContract = Pool.bind(event.params.pool);
-    if (poolContract) {
-      entity.homeCounter = poolContract._homeCounter().toI32();
-      entity.awayCounter = poolContract._awayCounter().toI32();
-      entity.drawCounter = poolContract._drawCounter().toI32();
-    }
-
-    entity.save();
+  if (!entity) {
+    entity = new EntityPool(event.params.pool.toHex());
   }
+  entity.betsCount = entity.betsCount + 1;
+
+  entity.volume = entity.volume.plus(event.params.amount);
+
+  let poolContract = Pool.bind(event.params.pool);
+  if (poolContract) {
+    entity.homeCounter = poolContract._homeCounter().toI32();
+    entity.awayCounter = poolContract._awayCounter().toI32();
+    entity.drawCounter = poolContract._drawCounter().toI32();
+
+    if (event.params.selection === 1) {
+      entity.homeBetsAmount = entity.homeBetsAmount.plus(event.params.amount);
+    } else if (event.params.selection === 2) {
+      entity.awayBetsAmount = entity.awayBetsAmount.plus(event.params.amount);
+    } else if (event.params.selection === 3) {
+      entity.drawBetsAmount = entity.drawBetsAmount.plus(event.params.amount);
+    }
+  }
+
+  entity.save();
 }
 
 export function handleBetRemoved(event: BetRemoved): void {
   // restar betsCount de la pool
   // reducir volume de la pool
   let entity = EntityPool.load(event.params.pool.toHex());
-  if (entity) {
-    entity.betsCount = entity.betsCount + 1;
-    entity.volume = entity.volume.minus(event.params.amount);
-
-    let poolContract = Pool.bind(event.params.pool);
-    if (poolContract) {
-      entity.homeCounter = poolContract._homeCounter().toI32();
-      entity.awayCounter = poolContract._awayCounter().toI32();
-      entity.drawCounter = poolContract._drawCounter().toI32();
-    }
-
-    entity.save();
+  if (!entity) {
+    entity = new EntityPool(event.params.pool.toHex());
   }
+  entity.betsCount = entity.betsCount + 1;
+  entity.volume = entity.volume.minus(event.params.amount);
+
+  let poolContract = Pool.bind(event.params.pool);
+  if (poolContract) {
+    entity.homeCounter = poolContract._homeCounter().toI32();
+    entity.awayCounter = poolContract._awayCounter().toI32();
+    entity.drawCounter = poolContract._drawCounter().toI32();
+
+    if (event.params.selection === 1) {
+      entity.homeBetsAmount = entity.homeBetsAmount.minus(event.params.amount);
+    } else if (event.params.selection === 2) {
+      entity.awayBetsAmount = entity.awayBetsAmount.minus(event.params.amount);
+    } else if (event.params.selection === 3) {
+      entity.drawBetsAmount = entity.drawBetsAmount.minus(event.params.amount);
+    }
+  }
+
+  entity.save();
 }
