@@ -6,7 +6,7 @@ dataSources:
     name: PoolFactory
     network: mumbai
     source:
-      address: "0x71226A9A3bc08808238195ea316cE1a73bb4324D"
+      address: "0xf161e96c9c7883b333358C3D070D9B7c971C006E"
       abi: PoolFactory
       startBlock: 19000000
     mapping:
@@ -49,6 +49,4 @@ templates:
           handler: handleBetPlaced
         - event: BetRemoved(uint256,address,uint256,address,uint8)
           handler: handleBetRemoved
-        - event: PoolResultAdded(uint256,address,uint8,uint256,uint256)
-          handler: handleResultAdded
       file: PoolFactory/PoolFactory.wasm

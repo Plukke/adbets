@@ -1,4 +1,4 @@
-import { BigInt, ipfs, json } from "@graphprotocol/graph-ts";
+import { BigInt, ipfs, json, log } from "@graphprotocol/graph-ts";
 import { PoolFactory, PoolCreated } from "../generated/PoolFactory/PoolFactory";
 import {
   Pool,
@@ -96,6 +96,7 @@ export function handlePoolCreated(event: PoolCreated): void {
 }
 
 export function handlePoolUpdated(event: PoolUpdated): void {
+  log.info("Pool Updated", [event.params.factory.toHex()]);
   let factory = Factory.load(event.params.factory.toHex());
   if (factory) {
     factory.activePools = factory.activePools.minus(BigInt.fromI32(1));
@@ -105,9 +106,20 @@ export function handlePoolUpdated(event: PoolUpdated): void {
   // checar de que categoria es la pool para restar de su contador
   let factoryContract = PoolFactory.bind(event.params.factory);
   let poolContract = Pool.bind(event.params._address);
+
+  let entity = EntityPool.load(event.params._address.toHex());
+  if (!entity) {
+    entity = new EntityPool(event.params._address.toHex());
+  }
+
+  entity.count = entity.count.plus(BigInt.fromI32(1));
+  entity.status = poolContract.status();
+
   if (factoryContract && poolContract) {
     handleCategory(factoryContract, poolContract, "minus");
   }
+
+  entity.save();
 }
 
 export function handleBetPlaced(event: BetPlaced): void {
