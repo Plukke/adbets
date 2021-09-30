@@ -59,3 +59,16 @@ type Bet @entity {
   status: Int!
   timestamp: BigInt!
 }
+
+type _Schema_
+  @fulltext(
+    name: "poolSearch"
+    language: simple
+    algorithm: rank
+    include: [
+      {
+        entity: "Pool"
+        fields: [{ name: "name" }, { name: "description" }, { name: "venue" }]
+      }
+    ]
+  )
