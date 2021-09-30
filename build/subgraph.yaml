@@ -6,7 +6,7 @@ dataSources:
     name: PoolFactory
     network: mumbai
     source:
-      address: "0xf161e96c9c7883b333358C3D070D9B7c971C006E"
+      address: "0x54E21a802a907E9fC45D3ADa5e1cd4cF723B8799"
       abi: PoolFactory
       startBlock: 19000000
     mapping:

@@ -584,6 +584,11 @@
             "internalType": "enum Pool.STATUS",
             "name": "status",
             "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "timestamp",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Pool.Result[]",
@@ -680,6 +685,11 @@
         "internalType": "enum Pool.STATUS",
         "name": "status",
         "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
