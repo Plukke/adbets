@@ -136,13 +136,13 @@ export function handleBetPlaced(event: BetPlaced): void {
     }
   }
 
-  let bet = Bet.load(event.params.id.toString());
+  const betId = entity.id + "-" + event.params.id.toString();
+  let bet = Bet.load(betId);
   if (!bet) {
-    bet = new Bet(event.params.id.toString());
+    bet = new Bet(betId);
   }
 
   bet.pool = entity.id;
-  bet.poolID = event.params.pool;
   bet.owner = event.params.user;
   bet.selection = event.params.selection;
   bet.amount = event.params.amount;
@@ -160,7 +160,7 @@ export function handleBetRemoved(event: BetRemoved): void {
   if (!entity) {
     entity = new EntityPool(event.params.pool.toHex());
   }
-  entity.betsCount = entity.betsCount + 1;
+  entity.betsCount = entity.betsCount - 1;
   entity.volume = entity.volume.minus(event.params.amount);
 
   let poolContract = Pool.bind(event.params.pool);
@@ -178,9 +178,10 @@ export function handleBetRemoved(event: BetRemoved): void {
     }
   }
 
-  let bet = Bet.load(event.params.id.toString());
+  const betId = entity.id + "-" + event.params.id.toString();
+  let bet = Bet.load(betId);
   if (!bet) {
-    bet = new Bet(event.params.id.toString());
+    bet = new Bet(betId);
   }
 
   bet.status = 2;
