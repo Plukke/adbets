@@ -218,6 +218,10 @@ export class Pool__listResultsResultValue0Struct extends ethereum.Tuple {
   get status(): i32 {
     return this[4].toI32();
   }
+
+  get timestamp(): BigInt {
+    return this[5].toBigInt();
+  }
 }
 
 export class Pool__resultsResult {
@@ -226,19 +230,22 @@ export class Pool__resultsResult {
   value2: BigInt;
   value3: BigInt;
   value4: i32;
+  value5: BigInt;
 
   constructor(
     value0: Address,
     value1: i32,
     value2: BigInt,
     value3: BigInt,
-    value4: i32
+    value4: i32,
+    value5: BigInt
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
     this.value4 = value4;
+    this.value5 = value5;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -254,6 +261,7 @@ export class Pool__resultsResult {
       "value4",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value4))
     );
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
     return map;
   }
 }
@@ -580,7 +588,7 @@ export class Pool extends ethereum.SmartContract {
   listResults(): Array<Pool__listResultsResultValue0Struct> {
     let result = super.call(
       "listResults",
-      "listResults():((address,uint8,uint256,uint256,uint8)[])",
+      "listResults():((address,uint8,uint256,uint256,uint8,uint256)[])",
       []
     );
 
@@ -592,7 +600,7 @@ export class Pool extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "listResults",
-      "listResults():((address,uint8,uint256,uint256,uint8)[])",
+      "listResults():((address,uint8,uint256,uint256,uint8,uint256)[])",
       []
     );
     if (result.reverted) {
@@ -637,7 +645,7 @@ export class Pool extends ethereum.SmartContract {
   results(param0: BigInt): Pool__resultsResult {
     let result = super.call(
       "results",
-      "results(uint256):(address,uint8,uint256,uint256,uint8)",
+      "results(uint256):(address,uint8,uint256,uint256,uint8,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -646,14 +654,15 @@ export class Pool extends ethereum.SmartContract {
       result[1].toI32(),
       result[2].toBigInt(),
       result[3].toBigInt(),
-      result[4].toI32()
+      result[4].toI32(),
+      result[5].toBigInt()
     );
   }
 
   try_results(param0: BigInt): ethereum.CallResult<Pool__resultsResult> {
     let result = super.tryCall(
       "results",
-      "results(uint256):(address,uint8,uint256,uint256,uint8)",
+      "results(uint256):(address,uint8,uint256,uint256,uint8,uint256)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -666,7 +675,8 @@ export class Pool extends ethereum.SmartContract {
         value[1].toI32(),
         value[2].toBigInt(),
         value[3].toBigInt(),
-        value[4].toI32()
+        value[4].toI32(),
+        value[5].toBigInt()
       )
     );
   }
